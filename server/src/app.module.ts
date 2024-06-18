@@ -10,6 +10,7 @@ import { EmailProcessor } from './email-processor';
 import { UserController } from './user/user.controller';
 import { PrismaModule } from './prisma/prisma.module';
 import * as dotenv from 'dotenv';
+import { ServeStaticModule } from '@nestjs/serve-static';
 dotenv.config();
 
 @Module({
@@ -39,11 +40,15 @@ dotenv.config();
         dir: join(__dirname, 'templates'),
         adapter: new HandlebarsAdapter(),
         options: {
-          strict: true,
+          strict: false,
         },
       },
     }),
     PrismaModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '../uploads'),
+      serveRoot: '/uploads/'
+    }),
   ],
   controllers: [AppController, UserController],
   providers: [AppService, UserService, EmailProcessor],

@@ -20,7 +20,5 @@ export class CreateUserDto {
   @IsNotEmpty()
   address: string;
 
-  @IsNotEmpty()
   documentPhoto: string;
-
 }

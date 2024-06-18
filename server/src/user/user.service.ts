@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { Mail } from 'src/types/mail.interface';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
@@ -22,10 +23,14 @@ export class UserService {
     });
   }
 
-  async createUser(data: User): Promise<User> {
+  async createUser(createUserDto: CreateUserDto, documentPhotoFilename: string): Promise<User> {
+    const documentPhotoUrl = `/uploads/${documentPhotoFilename}`;
     try {
       const user = await this.prisma.user.create({
-        data: data,
+        data: {
+          ...createUserDto,
+          documentPhoto: documentPhotoUrl,
+        },
       });
 
       const mailData: Mail = {
