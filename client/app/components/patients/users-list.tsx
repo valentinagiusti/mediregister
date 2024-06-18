@@ -11,7 +11,7 @@ const UsersList: FC<UsersListProps> = ({ users }) => {
       const currentIsSmallScreen = window.innerWidth < 640;
       setIsSmallScreen(currentIsSmallScreen);
       if (currentIsSmallScreen) {
-        setExpandedIds(new Set(users.map(user => user.id)));
+        setExpandedIds(new Set(users?.map(user => user.id) || []));
       } else {
         setExpandedIds(new Set());
       }
@@ -40,14 +40,18 @@ const UsersList: FC<UsersListProps> = ({ users }) => {
 
   return (
     <div className="flex flex-col space-y-4">
-      {users.map((user) => (
-        <UserCard
-          key={user.id}
-          user={user}
-          isExpanded={expandedIds.has(user.id)}
-          onToggleExpand={toggleExpand}
-        />
-      ))}
+      {!users || users.length === 0 ? (
+        <div>No users found</div>
+      ) : (
+        users.map((user) => (
+          <UserCard
+            key={user.id}
+            user={user}
+            isExpanded={expandedIds.has(user.id)}
+            onToggleExpand={toggleExpand}
+          />
+        ))
+      )}
     </div>
   );
 };
