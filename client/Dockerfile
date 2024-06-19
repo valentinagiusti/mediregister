@@ -1,26 +1,16 @@
-# Stage 1: Builder
-FROM node:20.14.0 AS builder
+# Stage: Development
+FROM node:20.14.0
 WORKDIR /app
 
-# Copy and install dependencies using Yarn
-COPY package*.json ./
+# Copy package.json and yarn.lock to install dependencies
+COPY package*.json yarn.lock ./
 RUN yarn install
 
 # Copy the rest of the application code
 COPY . .
 
-# Build the application
-RUN yarn build
-
-# Stage 2: Runtime
-FROM node:20.14.0
-WORKDIR /app
-
-# Copy built application from the builder stage
-COPY --from=builder /app ./
-
 # Expose the application port
 EXPOSE 3000
 
-# Start the application
-CMD ["yarn", "start"]
+# Start the application in development mode
+CMD ["yarn", "dev"]
